@@ -1,7 +1,7 @@
 'use client';
 
 import { features } from '@/lib/constants';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 
 export default function Features() {
@@ -55,11 +55,6 @@ export default function Features() {
                   </div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-white/80 text-base">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
               </Card>
             </motion.div>
           ))}
