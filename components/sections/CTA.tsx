@@ -11,20 +11,21 @@ import {
   FormMessage 
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { db } from '@/lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  organisation: z.string().min(2, { message: 'Organisation name must be at least 2 characters.' }),
+  city: z.string().min(2, { message: 'City is required.' }),
+  country: z.string().min(2, { message: 'Country is required.' }),
+  phone: z.string().min(10, { message: 'Please enter a valid phone number.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
-  school: z.string().min(2, { message: 'School name must be at least 2 characters.' }),
-  eventType: z.string().min(1, { message: 'Please select an event type.' }),
-  message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
 });
 
 export default function CTA() {
@@ -32,18 +33,31 @@ export default function CTA() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      organisation: '',
+      city: '',
+      country: '',
+      phone: '',
       email: '',
-      school: '',
-      eventType: '',
-      message: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    toast.success('Request submitted!', {
-      description: 'We\'ll be in touch soon to discuss your performance.',
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const docRef = await addDoc(collection(db, "inquiries"), {
+        ...values,
+        createdAt: new Date(),
+      });
+      
+      toast.success('Request submitted successfully!', {
+        description: 'We\'ll be in touch soon to discuss your performance.',
+      });
+      
+      form.reset();
+    } catch (error) {
+      toast.error('Something went wrong!', {
+        description: 'Please try again later.',
+      });
+    }
   }
 
   return (
@@ -91,7 +105,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Your Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Smith" {...field} />
+                              <Input placeholder="Abc Xyz" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -105,7 +119,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Email Address</FormLabel>
                             <FormControl>
-                              <Input placeholder="john@example.com" {...field} />
+                              <Input placeholder="abc@example.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -116,12 +130,12 @@ export default function CTA() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
-                        name="school"
+                        name="organisation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>School / Organization</FormLabel>
+                            <FormLabel>Organisation</FormLabel>
                             <FormControl>
-                              <Input placeholder="Lincoln Elementary School" {...field} />
+                              <Input placeholder="Excellent High School" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -130,50 +144,55 @@ export default function CTA() {
                       
                       <FormField
                         control={form.control}
-                        name="eventType"
+                        name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Event Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select event type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="assembly">School Assembly</SelectItem>
-                                <SelectItem value="workshop">Classroom Workshop</SelectItem>
-                                <SelectItem value="event">Special Event</SelectItem>
-                                <SelectItem value="professional">Professional Development</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="+91 0123456789" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>City</FormLabel>
+                            <FormControl>
+                              <Input placeholder="New Delhi" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Country</FormLabel>
+                            <FormControl>
+                              <Input placeholder="India" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
                     
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Additional Information</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Tell us about your event, student age group, and any specific topics you'd like covered." 
-                              className="min-h-[120px]"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <Button type="submit" className="w-full bg-primary text-white">
-                      Request a Performance
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-primary text-white"
+                      disabled={form.formState.isSubmitting}
+                    >
+                      {form.formState.isSubmitting ? 'Submitting...' : 'Request a Performance'}
                     </Button>
                   </form>
                 </Form>
