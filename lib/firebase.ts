@@ -18,11 +18,5 @@ const functions = getFunctions(app);
 // Update the function call to include custom headers
 export const sendEmailNotification = (data: any) => {
   const functionRef = httpsCallable(functions, 'sendEmailNotification');
-  return functionRef(data, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-    }
-  });
-};
+  return functionRef(data);
+  };
