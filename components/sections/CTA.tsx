@@ -1,5 +1,4 @@
 'use client';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -16,8 +15,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { db } from '@/lib/firebase';
+import { db, sendEmailNotification } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { useState } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -29,6 +29,7 @@ const formSchema = z.object({
 });
 
 export default function CTA() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,21 +43,48 @@ export default function CTA() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     try {
+      // Save to Firestore
       const docRef = await addDoc(collection(db, "inquiries"), {
         ...values,
         createdAt: new Date(),
       });
+
+      // Send email notifications with error handling
+      try {
+        await sendEmailNotification({
+          to: values.email,
+          name: values.name,
+          organisation: values.organisation,
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Continue execution even if email fails
+      }
+
+      // Track form submission in Google Analytics
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'form_submission', {
+          event_category: 'Contact',
+          event_label: 'Performance Request',
+        });
+      }
       
       toast.success('Request submitted successfully!', {
-        description: 'We\'ll be in touch soon to discuss your performance.',
+        description: 'Check your email for confirmation. We\'ll be in touch soon!',
       });
       
       form.reset();
     } catch (error) {
+      console.error('Error submitting form:', error);
       toast.error('Something went wrong!', {
         description: 'Please try again later.',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -103,9 +131,9 @@ export default function CTA() {
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Your Name</FormLabel>
+                            <FormLabel>Your Name *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Abc Xyz" {...field} />
+                              <Input placeholder="John Smith" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -117,9 +145,9 @@ export default function CTA() {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email Address</FormLabel>
+                            <FormLabel>Email Address *</FormLabel>
                             <FormControl>
-                              <Input placeholder="abc@example.com" {...field} />
+                              <Input placeholder="john@example.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -133,9 +161,9 @@ export default function CTA() {
                         name="organisation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Organisation</FormLabel>
+                            <FormLabel>Organisation *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Excellent High School" {...field} />
+                              <Input placeholder="Lincoln Elementary School" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -147,9 +175,9 @@ export default function CTA() {
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
+                            <FormLabel>Phone Number *</FormLabel>
                             <FormControl>
-                              <Input placeholder="+91 0123456789" {...field} />
+                              <Input placeholder="+1 (555) 123-4567" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -163,9 +191,9 @@ export default function CTA() {
                         name="city"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>City</FormLabel>
+                            <FormLabel>City *</FormLabel>
                             <FormControl>
-                              <Input placeholder="New Delhi" {...field} />
+                              <Input placeholder="New York" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -177,9 +205,9 @@ export default function CTA() {
                         name="country"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Country</FormLabel>
+                            <FormLabel>Country *</FormLabel>
                             <FormControl>
-                              <Input placeholder="India" {...field} />
+                              <Input placeholder="United States" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -189,10 +217,17 @@ export default function CTA() {
                     
                     <Button 
                       type="submit" 
-                      className="w-full bg-primary text-white"
-                      disabled={form.formState.isSubmitting}
+                      className="w-full bg-primary text-white transition-all"
+                      disabled={isSubmitting}
                     >
-                      {form.formState.isSubmitting ? 'Submitting...' : 'Request a Performance'}
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <span className="animate-spin">⏳</span> 
+                          Submitting...
+                        </span>
+                      ) : (
+                        'Request a Performance'
+                      )}
                     </Button>
                   </form>
                 </Form>

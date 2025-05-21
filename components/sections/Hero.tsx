@@ -16,10 +16,12 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
             className="mb-3"
           >
-            <span className="bg-white text-primary-blue px-4 py-1 rounded-full text-sm font-medium inline-flex items-center gap-1.5">
-              <Music className="h-4 w-4" />
-              Educational Performance
-            </span>
+            <div className="flex justify-center items-center mt-8">
+              <span className="bg-white text-primary-blue px-10 py-3 rounded-full text-3xl font-extrabold inline-flex items-center gap-4 shadow-lg">
+    Math-e-Music
+              </span>
+            </div>
+
           </motion.div>
           
           <motion.h1 

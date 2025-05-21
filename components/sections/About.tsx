@@ -12,7 +12,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="section-padding bg-white">
+    <section id="about" className="py-8 bg-white">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div 
@@ -22,7 +22,7 @@ export default function About() {
             transition={{ duration: 0.5 }}
             className="relative"
           >
-            <div className="relative aspect-[4/5] max-w-md mx-auto lg:max-w-none">
+            <div className="relative aspect-[4/5] max-w-xs mx-auto lg:max-w-sm">
               <div className="absolute inset-0 rounded-2xl bg-accent/40 -translate-x-4 -translate-y-4"></div>
               <img
                 src="https://static.wixstatic.com/media/8d63a0_b2adbe06803a4c80b31afd6040b587f4~mv2.png/v1/fill/w_1201,h_964,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/me%20png%20copy.png"
@@ -65,7 +65,6 @@ export default function About() {
             </div>
             
             <div className="flex items-center gap-6">
-              <Button className="bg-primary text-white">Learn More</Button>
               <div className="flex gap-4">
                 {socialIcons.map((social, index) => (
                   <a 
