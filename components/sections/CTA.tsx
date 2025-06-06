@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -15,9 +16,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { db, sendEmailNotification } from '@/lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -47,23 +47,28 @@ export default function CTA() {
     
     setIsSubmitting(true);
     try {
-      // Save to Firestore
-      const docRef = await addDoc(collection(db, "inquiries"), {
-        ...values,
-        createdAt: new Date(),
-      });
+      // Replace these with your actual EmailJS credentials
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
 
-      // Send email notifications with error handling
-      try {
-        await sendEmailNotification({
-          to: values.email,
-          name: values.name,
+      // Send email using EmailJS
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: values.name,
+          from_email: values.email,
           organisation: values.organisation,
-        });
-      } catch (emailError) {
-        console.error('Email notification failed:', emailError);
-        // Continue execution even if email fails
-      }
+          city: values.city,
+          country: values.country,
+          phone: values.phone,
+          message: `New performance request from ${values.name} at ${values.organisation} in ${values.city}, ${values.country}. Contact: ${values.email}, ${values.phone}`,
+        },
+        publicKey
+      );
+
+      console.log('Email sent successfully:', result);
 
       // Track form submission in Google Analytics
       if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -74,14 +79,14 @@ export default function CTA() {
       }
       
       toast.success('Request submitted successfully!', {
-        description: 'Check your email for confirmation. We\'ll be in touch soon!',
+        description: 'We\'ll be in touch soon to discuss your performance request!',
       });
       
       form.reset();
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error sending email:', error);
       toast.error('Something went wrong!', {
-        description: 'Please try again later.',
+        description: 'Please try again later or contact us directly.',
       });
     } finally {
       setIsSubmitting(false);
@@ -133,7 +138,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Your Name *</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Smith" {...field} />
+                              <Input placeholder="Abc Xyz" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -147,7 +152,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Email Address *</FormLabel>
                             <FormControl>
-                              <Input placeholder="john@example.com" {...field} />
+                              <Input placeholder="abc@example.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -163,7 +168,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Organisation *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Lincoln Elementary School" {...field} />
+                              <Input placeholder="Example High School" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -177,7 +182,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Phone Number *</FormLabel>
                             <FormControl>
-                              <Input placeholder="+1 (555) 123-4567" {...field} />
+                              <Input placeholder="+91 0123456789" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -193,7 +198,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>City *</FormLabel>
                             <FormControl>
-                              <Input placeholder="New York" {...field} />
+                              <Input placeholder="New Delhi" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -207,7 +212,7 @@ export default function CTA() {
                           <FormItem>
                             <FormLabel>Country *</FormLabel>
                             <FormControl>
-                              <Input placeholder="United States" {...field} />
+                              <Input placeholder="India" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -223,7 +228,7 @@ export default function CTA() {
                       {isSubmitting ? (
                         <span className="flex items-center gap-2">
                           <span className="animate-spin">⏳</span> 
-                          Submitting...
+                          Sending...
                         </span>
                       ) : (
                         'Request a Performance'
