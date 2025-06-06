@@ -24,7 +24,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Logo />
             <p className="text-white/70 mt-4">
-              Transforming education through the perfect blend of mathematics and music.
+              Math and Science Like Never Before: A Celebration in Music
             </p>
             <div className="flex space-x-4 pt-2">
               {socialLinks.map((link, index) => (
@@ -53,62 +53,6 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Programs</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link 
-                  href="#" 
-                  className="text-white/70 hover:text-yellow transition-colors"
-                >
-                  Elementary (K-5)
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="#" 
-                  className="text-white/70 hover:text-yellow transition-colors"
-                >
-                  Middle School (6-8)
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="#" 
-                  className="text-white/70 hover:text-yellow transition-colors"
-                >
-                  High School (9-12)
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="#" 
-                  className="text-white/70 hover:text-yellow transition-colors"
-                >
-                  Special Events
-                </Link>
-              </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3 text-white/70">
-                <Mail className="h-5 w-5 text-yellow" />
-                <span>info@mathemusic.com</span>
-              </li>
-              <li className="flex items-center gap-3 text-white/70">
-                <Phone className="h-5 w-5 text-yellow" />
-                <span>(555) 123-4567</span>
-              </li>
-              <li className="flex items-start gap-3 text-white/70">
-                <MapPin className="h-5 w-5 text-yellow mt-1" />
-                <span>123 Harmony Lane<br />Musicville, CA 90210</span>
-              </li>
             </ul>
           </div>
         </div>
