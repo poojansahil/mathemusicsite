@@ -12,12 +12,12 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://math-e-music.com'), // 🔁 use your real domain here
-  title: 'Math-e-Music | Education Through Performance',
+  title: 'Math-e-Music | Math and Science Like Never Before',
   description:
     'Experience the perfect blend of mathematics and music through engaging educational performances for schools and events.',
   keywords: 'math, music, education, performance, school shows, STEM',
   openGraph: {
-    title: 'Math-e-Music | Education Through Performance',
+    title: 'Math-e-Music | Math and Science Like Never Before',
     description:
       'Experience the perfect blend of mathematics and music through engaging educational performances for schools and events.',
     url: 'https://math-e-music.com',
