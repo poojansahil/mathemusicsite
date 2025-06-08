@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://math-e-music.com'), // 🔁 use your real domain here
   title: 'Math-e-Music | Math and Science Like Never Before',
   description:
-    'Experience the perfect blend of mathematics and music through engaging educational performances for schools and events.',
+    'Experience the magical intersection of mathematics and music through interactive, educational performances that transform abstract concepts into unforgettable learning experiences for students of all ages.',
   keywords: 'math, music, education, performance, school shows, STEM',
   openGraph: {
     title: 'Math-e-Music | Math and Science Like Never Before',
     description:
-      'Experience the perfect blend of mathematics and music through engaging educational performances for schools and events.',
-    url: 'https://math-e-music.com',
+      'Experience the magical intersection of mathematics and music through interactive, educational performances that transform abstract concepts into unforgettable learning experiences for students of all ages.',
+    url: 'https://mathemusic.in',
     siteName: 'Math-e-Music',
     images: [
       {

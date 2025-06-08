@@ -64,7 +64,7 @@ export const features = [
   },
    {
     id: 4,
-    title: 'Orignal Songs and Parodies bring the concepts to life',
+    title: 'Original Songs and Parodies bring the concepts to life',
     
     icon: BookOpen,
   },
