@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Math-e-Music',
     images: [
       {
-        url: 'https://www.mathemusic.in/math-e-music.jpg', // make sure this image is in your /public/images folder
+        url: 'https://www.mathemusic.in/bg.jpg', // make sure this image is in your /public/images folder
         width: 1200,
         height: 630,
         alt: 'Math-e-Music',
