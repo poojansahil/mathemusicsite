@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://math-e-music.com'), // 🔁 use your real domain here
+  metadataBase: new URL('https://www.mathemusic.in'), // 🔁 use your real domain here
   title: 'Math-e-Music | Math and Science Like Never Before',
   description:
     'Experience the magical intersection of mathematics and music through interactive, educational performances that transform abstract concepts into unforgettable learning experiences for students of all ages.',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Math-e-Music',
     images: [
       {
-        url: '/images/math-e-music.jpg', // make sure this image is in your /public/images folder
+        url: 'https://www.mathemusic.in/math-e-music.jpg', // make sure this image is in your /public/images folder
         width: 1200,
         height: 630,
         alt: 'Math-e-Music',
