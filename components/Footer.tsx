@@ -75,18 +75,13 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3">
               {footerOfferings.map((item) => (
-                <li key={item.label} className="flex items-center gap-2">
+                <li key={item.label}>
                   <Link
                     href={item.href}
                     className="text-white/60 hover:text-[rgb(var(--yellow))] transition-colors text-sm"
                   >
                     {item.label}
                   </Link>
-                  {item.badge && (
-                    <span className="text-[10px] font-medium bg-white/10 text-white/40 px-1.5 py-0.5 rounded">
-                      {item.badge}
-                    </span>
-                  )}
                 </li>
               ))}
             </ul>

@@ -72,17 +72,6 @@ function OfferingCard({
         ))}
       </motion.div>
 
-      {/* Pricing */}
-      <motion.p
-        initial={{ opacity: 0, scale: 0.85 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.42 + index * 0.12 }}
-        className="text-[rgb(var(--yellow))] font-semibold text-sm mb-5"
-      >
-        {offering.pricing}
-      </motion.p>
-
       {/* CTA */}
       <a href="#contact">
         <Button

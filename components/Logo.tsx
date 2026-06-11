@@ -22,7 +22,7 @@ export default function Logo({ variant = 'teal' }: LogoProps) {
           alt="Math-e-Music logo"
           width={56}
           height={56}
-          className="flex-shrink-0 -m-2"
+          className="flex-shrink-0 -m-2 translate-y-[3px]"
         />
         <span className={`font-bold text-xl hidden sm:inline-block ${textColor}`}>
           Math-e-Music
