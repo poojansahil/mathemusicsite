@@ -49,7 +49,7 @@ export default function PhilosophyStrip() {
   });
 
   return (
-    <div ref={outerRef} className="relative" style={{ height: '350vh' }}>
+    <div ref={outerRef} className="relative" style={{ height: '220vh' }}>
       <div className="sticky top-0 h-screen flex items-center justify-center bg-[rgb(var(--dark-blue))] overflow-hidden">
 
         {/* Staff lines */}
@@ -64,10 +64,10 @@ export default function PhilosophyStrip() {
             {chunks.map((chunk, ci) => {
               const opacity = useTransform(
                 scrollYProgress,
-                [chunk.start, chunk.start + 0.1, chunk.end - 0.05, chunk.end],
+                [chunk.start, chunk.start + 0.06, chunk.end - 0.04, chunk.end],
                 [0.08, 1, 1, ci < chunks.length - 1 ? 0.3 : 1]
               );
-              const y = useTransform(scrollYProgress, [chunk.start, chunk.start + 0.12], [22, 0]);
+              const y = useTransform(scrollYProgress, [chunk.start, chunk.start + 0.07], [18, 0]);
 
               return (
                 <motion.div key={ci} style={{ opacity, y }} className="space-y-1">
